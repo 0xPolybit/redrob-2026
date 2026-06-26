@@ -1,0 +1,27 @@
+# Redrob Ranker — pinned dependencies.
+#
+# Two dependency groups:
+#   * rank.py (the timed, CPU-only, no-network step) needs only:
+#       numpy, polars, pyarrow, faiss-cpu, rank-bm25, lightgbm
+#   * the offline build additionally needs:
+#       sentence-transformers (+ torch), anthropic, pyyaml
+#
+# Versions are pinned for reproducibility in the Stage-3 Docker container.
+
+# --- core / online (rank.py) ---
+numpy==1.26.4
+polars==1.8.2
+pyarrow==17.0.0
+faiss-cpu==1.8.0.post1
+rank-bm25==0.2.2
+lightgbm==4.5.0
+
+# --- offline build only ---
+# (rank.py imports none of these, so they are not part of the timed reproduction)
+sentence-transformers==3.0.1
+torch==2.2.2
+anthropic>=0.69.0          # current SDK: output_config.format, adaptive thinking, claude-opus-4-8
+pyyaml==6.0.2
+
+# --- dev / tests ---
+pytest==8.3.3

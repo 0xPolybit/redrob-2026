@@ -1,0 +1,59 @@
+# Redrob Hackathon — Submission Metadata (FILL IN the <...> placeholders)
+team_name: "0xEpoch"
+
+primary_contact:
+  name: "Swastik Biswas"
+  email: "swastikbiswas962@gmail.com"
+  phone: "+91-9382280814"
+
+team_members:
+  - name: "Swastik Biswas"
+    email: "swastikbiswas962@gmail.com"
+    role: "Ranking / LTR"
+  - name: "Himanshi Saxena"
+    email: "9b.himanshisaxena@gmail.com"
+    role: "Features / Retrieval"
+
+github_repo: "https://github.com/0xPolybit/redrob-2026"
+sandbox_link: "https://huggingface.co/spaces/<YOUR_USERNAME>/redrob-ranker"
+reproduce_command: "python src/rank.py --candidates ./data/candidates.jsonl --out ./submission.csv"
+
+compute:
+  platform: "<e.g. Local Linux box / MacBook Pro M2>"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11.x"
+  os: "<e.g. Ubuntu 22.04 LTS>"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true        # embeddings, FAISS/BM25 index, silver labels, LightGBM model
+  pre_computation_time_minutes: 30      # approximate — update to your measured value
+
+ai_tools_used:
+  - "Claude"        # architecture, JD decomposition (offline), silver labels (offline), reasoning (offline)
+  # add "GitHub Copilot" / "Cursor" etc. if used
+
+ai_usage_summary: |
+  LLMs are used ONLY offline (not in the timed ranking step): to decompose the JD into a
+  structured rubric, to generate silver relevance labels over a sampled subset for training
+  the LightGBM ranker, and to draft grounded reasoning strings for the final top 100 (each
+  fact-checked against the candidate record). rank.py makes no network or LLM calls.
+
+methodology_summary: |
+  Two-phase recommender. OFFLINE: build dense embeddings (BGE-small) + a FAISS index and a
+  BM25 index over candidate profile text; decompose the JD into a rubric of must-haves,
+  disqualifiers and anti-signals; extract deterministic features (semantic fit, career
+  structure, keyword-stuffer + honeypot/impossibility flags, behavioral signals); generate
+  LLM silver labels on a sample and train a LightGBM LambdaRank model (optimizes NDCG).
+  ONLINE rank.py (CPU, no network, <5 min): hybrid-retrieve ~2000 candidates, score them with
+  the model, apply a rule layer (hard-demote honeypots/disqualifiers, behavioral availability
+  multiplier), take the top 100 and attach precomputed grounded reasoning. The title-vs-skills
+  coherence and keyword-stuffer features defeat the keyword-stuffer traps; general impossibility
+  checks keep honeypots out of the top 100.
+
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true

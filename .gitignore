@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Redrob Ranker ---
+# Large dataset (place under data/, build artifacts from it locally).
+candidates.jsonl
+data/candidates.jsonl
+data/*.jsonl
+# Generated build artifacts (rebuilt by the offline pipeline); keep the dir.
+artifacts/*
+!artifacts/.gitkeep
+# Produced submission
+submission.csv

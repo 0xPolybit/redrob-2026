@@ -1,0 +1,9 @@
+.git
+.venv
+data/*.jsonl
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+*.docx
+submission.csv
